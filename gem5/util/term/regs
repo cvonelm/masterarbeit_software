@@ -1,0 +1,121 @@
+ra             0x80001880       0x80001880 <intr_on+32>
+sp             0x800097d0       0x800097d0 <stack0+3952>
+gp             0x0      0x0
+tp             0x0      0x0
+t0             0x0      0
+t1             0x1000   4096
+t2             0x1      1
+fp             0x800097f0       0x800097f0 <stack0+3984>
+s1             0x1      1
+a0             0x200002002      8589942786
+a1             0x1      1
+a2             0x800097e0       2147522528
+a3             0x80026060       2147639392
+a4             0x0      0
+a5             0x200002002      8589942786
+a6             0x0      0
+a7             0x0      0
+s2             0x0      0
+s3             0x0      0
+s4             0x0      0
+s5             0x0      0
+s6             0x0      0
+s7             0x0      0
+s8             0x0      0
+s9             0x0      0
+s10            0x0      0
+s11            0x0      0
+t3             0x80008028       2147516456
+t4             0x0      0
+t5             0x0      0
+t6             0x0      0
+pc             0x3ffffff000     0x3ffffff000
+ft0            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft1            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft2            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft3            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft4            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft5            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft6            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft7            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs0            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs1            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa0            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa1            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa2            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa3            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa4            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa5            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa6            {float = 0, double = 0}  (raw 0x0000000000000000)
+fa7            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs2            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs3            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs4            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs5            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs6            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs7            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs8            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs9            {float = 0, double = 0}  (raw 0x0000000000000000)
+fs10           {float = 0, double = 0}  (raw 0x0000000000000000)
+fs11           {float = 0, double = 0}  (raw 0x0000000000000000)
+ft8            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft9            {float = 0, double = 0}  (raw 0x0000000000000000)
+ft10           {float = 0, double = 0}  (raw 0x0000000000000000)
+ft11           {float = 0, double = 0}  (raw 0x0000000000000000)
+ustatus        0x2000   8192
+fflags         0x0      RD:0 NV:0 DZ:0 OF:0 UF:0 NX:0
+frm            0x0      FRM:0 [RNE (round to nearest; ties to even)]
+fcsr           0x0      RD:0 NV:0 DZ:0 OF:0 UF:0 NX:0 FRM:0 [RNE (round to nearest; ties to even)]
+uie            0x0      0
+utvec          0x0      0
+uscratch       0x0      0
+uepc           0x0      0
+ucause         0x0      0
+utval          0x0      0
+uip            0x0      0
+sstatus        0x200002020      8589942816
+sedeleg        0x0      0
+sideleg        0x0      0
+sie            0x222    546
+stvec          0x0      0
+scounteren     0x7      7
+sscratch       0x8001bd80       2147597696
+sepc           0x8000180a       2147489802
+scause         0x8000000000000009       -9223372036854775799
+stval          0x0      0
+sip            0x200    512
+satp           0x80000000000807ff       -9223372036854249473
+mstatus        0xa000028a0      SD:0 VM:00 MXR:0 PUM:0 MPRV:0 XS:0 FS:1 MPP:1 HPP:0 SPP:0 MPIE:1 HPIE:0 SPIE:1 UPIE:0 MIE:0 HIE:0 SIE:0 UIE:0
+misa           0x800000000014112d       RV64ACDFIMSU
+medeleg        0xfffff  1048575
+mideleg        0xfffff  1048575
+mie            0x222    546
+mtvec          0x0      0
+mcounteren     0x7      7
+mscratch       0x0      0
+mepc           0x80000e00       2147487232
+mcause         0x0      0
+mtval          0x0      0
+--Type <RET> for more, q to quit, c to continue without paging--
+mip            0x280    640
+hstatus        0x501000004000000        360569445233459200
+hedeleg        0x200000001000000        144115188092633088
+hideleg        0x6970756c01000000       7597701678107721728
+hie            0x3032406374722d6f       3472909058555653487
+hip            0x1b0000000a000000       1945555039191826432
+cycle          0x0      0
+time           0x35fcd2 3538130
+mvendorid      0x0      0
+marchid        0x0      0
+mimpid         0x0      0
+mhartid        0x0      0
+htvec          0x303030343030   52983525290032
+hscratch       0x1000000003000000       1152921504657178624
+hepc           0x32000000       838860800
+hcause         0x400020 4194336
+hbadaddr       0x300000000100000        216172782114832384
+modeid         0x0      0
+targetmode     0x1      1
+ccalladdr      0x0      0
+placeholder    0x6e722c6f       1852976239
+

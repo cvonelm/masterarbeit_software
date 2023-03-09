@@ -1,0 +1,1 @@
+eelf32lriscv.c: ./emulparams/elf32lriscv.sh ./emulparams/elf32lriscv-defs.sh ./scripttempl/elf.sc ./emultempl/elf.em ./emultempl/elf-generic.em ./emultempl/riscvelf.em ./emultempl/emulation.em

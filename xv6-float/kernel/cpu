@@ -1,0 +1,56 @@
+sleeplock.c:  initlock(&lk->lk, "sleep lock");
+sleeplock.c:  lk->name = name;
+sleeplock.c:  lk->locked = 0;
+sleeplock.c:  lk->pid = 0;
+sleeplock.c:  acquire(&lk->lk);
+sleeplock.c:  while (lk->locked) {
+sleeplock.c:    sleep(lk, &lk->lk);
+sleeplock.c:  lk->locked = 1;
+sleeplock.c:  lk->pid = myproc()->pid;
+sleeplock.c:  release(&lk->lk);
+sleeplock.c:  acquire(&lk->lk);
+sleeplock.c:  lk->locked = 0;
+sleeplock.c:  lk->pid = 0;
+sleeplock.c:  release(&lk->lk);
+sleeplock.c:  acquire(&lk->lk);
+sleeplock.c:  r = lk->locked && (lk->pid == myproc()->pid);
+sleeplock.c:  release(&lk->lk);
+spinlock.c:  lk->name = name;
+spinlock.c:  lk->locked = 0;
+spinlock.c:  lk->cpu = 0;
+spinlock.c:  //   s1 = &lk->locked
+spinlock.c:  while(__sync_lock_test_and_set(&lk->locked, 1) != 0)
+spinlock.c:  lk->cpu = mycpu();
+spinlock.c:  lk->cpu = 0;
+spinlock.c:  // Release the lock, equivalent to lk->locked = 0.
+spinlock.c:  //   s1 = &lk->locked
+spinlock.c:  __sync_lock_release(&lk->locked);
+spinlock.c:  r = (lk->locked && lk->cpu == mycpu());
+kernel.asm:  lk->name = name;
+kernel.asm:  lk->locked = 0;
+kernel.asm:  lk->cpu = 0;
+kernel.asm:  //   s1 = &lk->locked
+kernel.asm:  while(__sync_lock_test_and_set(&lk->locked, 1) != 0)
+kernel.asm:  lk->cpu = mycpu();
+kernel.asm:  lk->cpu = 0;
+kernel.asm:  //   s1 = &lk->locked
+kernel.asm:  __sync_lock_release(&lk->locked);
+kernel.asm:  r = (lk->locked && lk->cpu == mycpu());
+kernel.asm:  initlock(&lk->lk, "sleep lock");
+kernel.asm:  lk->name = name;
+kernel.asm:  lk->locked = 0;
+kernel.asm:  lk->pid = 0;
+kernel.asm:  acquire(&lk->lk);
+kernel.asm:  while (lk->locked) {
+kernel.asm:    sleep(lk, &lk->lk);
+kernel.asm:  while (lk->locked) {
+kernel.asm:  lk->locked = 1;
+kernel.asm:  lk->pid = myproc()->pid;
+kernel.asm:  release(&lk->lk);
+kernel.asm:  acquire(&lk->lk);
+kernel.asm:  lk->locked = 0;
+kernel.asm:  lk->pid = 0;
+kernel.asm:  release(&lk->lk);
+kernel.asm:  acquire(&lk->lk);
+kernel.asm:  r = lk->locked && (lk->pid == myproc()->pid);
+kernel.asm:  release(&lk->lk);
