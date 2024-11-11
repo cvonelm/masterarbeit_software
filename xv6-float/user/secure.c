@@ -192,14 +192,14 @@ void *crypto_decrypt(void *buf)
 {
  uint64_t decrypted;
  if (crypto_box_open_easy((unsigned char*)&decrypted, d.ciphertext, d.ciphertext_size, d.nonce,
-                          public_key, secret_key) != 0) {
+                          public_key, (unsigned char*)secret_key) != 0) {
      /* message for Bob pretending to be from Alice has been forged! */
    return(void*)1;
  }
         printf("%s: %d", d.name, decrypted);
 
         decrypted *= 0.1;
-  if(crypto_box_easy(d.ciphertext, &decrypted, 8, d.nonce, public_key, secret_key ) != 0)
+  if(crypto_box_easy((unsigned char*)d.ciphertext, (unsigned char*)&decrypted, 8, d.nonce, public_key, secret_key ) != 0)
   {
     return (void*)1;
   }
@@ -212,7 +212,7 @@ int main(void)
  mode->syscallhandler = &syscallhandler;
  crypto_modeid = modecreate(mode);
   db_modeid = modecreate(mode);
-  permchange(db_modeid, secret_key, sizeof(secret_key), 0);
+  permchange(db_modeid, (int)secret_key, sizeof(secret_key), 0);
   childcall(mode, crypto_modeid, crypto_init, NULL);
   childcall(mode, db_modeid, db_init, NULL);
   while(1)

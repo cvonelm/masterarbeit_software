@@ -1,4 +1,5 @@
- struct stat;
+#include <kernel/types.h> 
+struct stat;
  struct tm;
  
  // system calls
@@ -29,3 +30,4 @@
  int mentry(uint);
  int lseek(int, int, int);
  int permchange(int, int, int, int);
+ int access(const char*);

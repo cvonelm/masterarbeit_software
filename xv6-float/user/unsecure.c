@@ -151,7 +151,7 @@ void *crypto_decrypt()
         printf("%s: %d", d.name, decrypted);
 
         decrypted *= 0.1;
-  if(crypto_box_easy(d.ciphertext, &decrypted, 8, d.nonce, public_key, secret_key ) != 0)
+  if(crypto_box_easy(d.ciphertext, (unsigned char*)&decrypted, 8, d.nonce, public_key, secret_key ) != 0)
   {
     return (void*)1;
   }

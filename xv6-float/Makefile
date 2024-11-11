@@ -95,20 +95,12 @@ endif
 
 LDFLAGS = -z max-page-size=4096
 
-$K/kernel: $(OBJS) kernel/proc.o $K/kernel.ld $U/initcode
-	$(LD) $(LDFLAGS) -T $K/kernel.ld -o $K/kernel $(OBJS) 
-	$(OBJDUMP) -S $K/kernel > $K/kernel.asm
-	$(OBJDUMP) -t $K/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $K/kernel.sym
-	$(OBJCOPY) -O binary $K/kernel $K/kernel.bin
-
 %.o: %.S
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-kernel/proc.o: 
-	$(CC) $(CFLAGS2) -c kernel/proc.c -o $@
 
 $U/initcode: $U/initcode.S
 	$(CC) $(CFLAGS) -nostdinc -I. -Ikernel -c $U/initcode.S -o $U/initcode.o
@@ -116,32 +108,21 @@ $U/initcode: $U/initcode.S
 	$(OBJCOPY) -S -O binary $U/initcode.out $U/initcode
 	$(OBJDUMP) -S $U/initcode.o > $U/initcode.asm 
 
+
+$K/kernel: $(OBJS) kernel/proc.o $K/kernel.ld $U/initcode
+	$(LD) $(LDFLAGS) -T $K/kernel.ld -o $K/kernel $(OBJS) 
+	$(OBJDUMP) -S $K/kernel > $K/kernel.asm
+	$(OBJDUMP) -t $K/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $K/kernel.sym
+	$(OBJCOPY) -O binary $K/kernel $K/kernel.bin
+
+kernel/proc.o: 
+	$(CC) $(CFLAGS2) -c kernel/proc.c -o $@
+
 $U/pcalltemplate: $U/pcalltemplate.S
 	$(CC) $(CFLAGS) -nostdinc -I. -Ikernel -c $U/pcalltemplate\.S -o $U/pcalltemplate.o
 	$(LD) $(LDFLAGS) -N -e start -Ttext 0 -o $U/pcalltemplate\.out $U/pcalltemplate.o
 	$(OBJCOPY) -S -O binary $U/pcalltemplate\.out $U/pcalltemplate
 	$(OBJDUMP) -S $U/pcalltemplate\.o > $U/pcalltemplate.asm 
-
-$U/_sqlitetest: $U/bla.c 
-	$(CC)   -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/bla.c user/newlib_syscall.S -I. -lsodium -lc -lm -lgcc -o $U/_sqlitetest
-
-
-$U/_ccalltest: $U/ccalltest.c 
-	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/newlib_syscall.S user/ccalltest.c user/modecall.S  user/usys.S -I. -o $U/_ccalltest -lsodium -lc -lm -lgcc
-$U/_pipetest: $U/pipetest.c 
-	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/newlib_syscall.S user/pipetest.c user/usys.S -I. -o $U/_pipetest -lc -lm -lgcc
-$U/_unsecuresql: $U/unsecure.c 
-	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/unsecure.c user/newlib_syscall.S user/test_demovfs.c user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_unsecuresql
-	riscv64-elf-objcopy --only-keep-debug $U/_unsecuresql $U/unsecure.debug
-	$(STRIP) --strip-debug --strip-unneeded $U/_unsecuresql
-$U/_procsecsql: $U/procsec.c 
-	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/usys.S user/procsec.c user/newlib_syscall.S user/test_demovfs.c user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_procsecsql
-	riscv64-elf-objcopy --only-keep-debug $U/_procsecsql $U/procsec.debug
-	$(STRIP) --strip-debug --strip-unneeded $U/_procsecsql
-$U/_securesql: $U/secure.c 
-	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/secure.c user/newlib_syscall.S user/test_demovfs.c user/usys.S user/modecall.S user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_securesql
-	$(OBJCOPY) --only-keep-debug $U/_securesql $U/secure.debug
-	$(STRIP) --strip-debug --strip-unneeded $U/_securesql
 
 tags: $(OBJS) _init
 	etags *.S *.c
@@ -163,7 +144,33 @@ $U/_forktest: $U/forktest.o $(ULIB)
 	# forktest has less library code linked in - needs to be small
 	# in order to be able to max out the proc table.
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_forktest $U/forktest.o $U/ulib.o $U/usys.o
-	$(OBJDUMP) -S $U/_forktest > $U/forktest.asm
+
+libsodium-install:
+	mkdir -p libsodium-build
+	cd libsodium-build  && ../libsodium-1.0.20/configure --host=riscv64-elf --prefix=$$PWD/../libsodium-install
+	cd libsodium-build && make
+	cd libsodium-build && make install
+
+$U/_sqlitetest: $U/bla.c 
+	$(CC)   -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/bla.c user/newlib_syscall.S -I. -lsodium -lc -lm -lgcc -o $U/_sqlitetest
+
+
+$U/_ccalltest: $U/ccalltest.c libsodium-install $(ULIB)
+	$(CC) -Llibsodium-install/lib -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/newlib_syscall.S user/ccalltest.c user/modecall.S  user/usys.S -I. -o $U/_ccalltest -lsodium -lc -lm -lgcc
+$U/_pipetest: $U/pipetest.c $(ULIB)
+	$(CC) -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/newlib_syscall.S user/pipetest.c user/usys.S -I. -o $U/_pipetest -lc -lm -lgcc
+$U/_unsecuresql: $U/unsecure.c libsodium-install $(ULIB)
+	$(CC) -Llibsodium-install/lib -Ilibsodium-install/include -g  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/unsecure.c user/newlib_syscall.S user/test_demovfs.c user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_unsecuresql
+	riscv64-elf-objcopy --only-keep-debug $U/_unsecuresql $U/unsecure.debug
+	$(STRIP) --strip-debug --strip-unneeded $U/_unsecuresql
+$U/_procsecsql: $U/procsec.c libsodium-install $(ULIB)
+	$(CC) -g -Ilibsodium-install/include -Llibsodium-install/lib -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1 user/usys.S user/procsec.c user/newlib_syscall.S user/test_demovfs.c user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_procsecsql
+	riscv64-elf-objcopy --only-keep-debug $U/_procsecsql $U/procsec.debug
+	$(STRIP) --strip-debug --strip-unneeded $U/_procsecsql
+$U/_securesql: $U/secure.c $(ULIB) libsodium-install
+	$(CC) -g -Ilibsodium-install/include -Llibsodium-install/lib  -DSQLITE_TEMP_STORE=3  -DSQLITE_THREADSAFE=0 -DSQLITE_OS_OTHER=1  user/secure.c user/newlib_syscall.S user/test_demovfs.c user/usys.S user/modecall.S user/sqlite3.c -I. -lsodium -lc -lm -lgcc -o $U/_securesql
+	$(OBJCOPY) --only-keep-debug $U/_securesql $U/secure.debug
+	$(STRIP) --strip-debug --strip-unneeded $U/_securesql
 
 mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
 	gcc -Werror -Wall -I. -o mkfs/mkfs mkfs/mkfs.c

@@ -38,13 +38,13 @@ void *default_pcall_handler(void *arg)
    mode->sp = (unsigned long long)&mode->stack[15];
    mode->syscallhandler = &scall;
    mode->pcallhandler = &default_pcall_handler;
-   mentry(mode->template);
+   mentry((int)mode->template);
    return mode;
  }
  int modecreate(struct mode *mode)
  {
    int child = mcreate();
-   permchange(child, mode, sizeof(struct mode), 0);
+   permchange(child, (int)mode, sizeof(struct mode), 0);
    return child;
  }
  int modedelete(int child)
